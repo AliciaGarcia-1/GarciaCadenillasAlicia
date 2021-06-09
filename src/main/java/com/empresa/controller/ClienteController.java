@@ -39,7 +39,8 @@ public class ClienteController {
 	}
 
 	@GetMapping("/buscarPorDNI/{dni}")
-	public ResponseEntity<List<Cliente>> buscar(@PathVariable("dni") String dni) {
+	@ResponseBody
+	public ResponseEntity<List<Cliente>> listaPorDni(@PathVariable("dni") String dni) {
 		log.info(">>>> busca por dni : " + dni);
 		List<Cliente> lstCliente = service.listaPorDni(dni);
 		if (!CollectionUtils.isEmpty(lstCliente)) {
@@ -50,18 +51,19 @@ public class ClienteController {
 		}
 	}
 
-//	@GetMapping("/{id}")
+	@GetMapping("/PorId/{id}")
 	@ResponseBody
-//	public ResponseEntity<Cliente> listaPorId(@PathVariable("id") String id) {
-//		Optional <Cliente> optCliente =service.obtienePorId(int idCliente);
-//		if (optCliente.isPresent()) {
-//			return ResponseEntity.ok(optCliente.get());
-//		} else {
-//			return ResponseEntity.notFound().build();
-//		}
-//	}
+	public ResponseEntity<Cliente> listaPorId(@PathVariable("id") int idCliente) {
+		Optional <Cliente> optCliente =service.obtienePorId(idCliente);
+		if (optCliente.isPresent()) {
+			return ResponseEntity.ok(optCliente.get());
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
 
 	@PostMapping
+	@ResponseBody
 	public ResponseEntity<Cliente> registra(@RequestBody Cliente obj) {
 		log.info(">>>> registra  " + obj.getIdCliente());
 		Cliente objSalida = service.insertaActualizaCliente(obj);
@@ -73,6 +75,7 @@ public class ClienteController {
 	}
 
 	@PutMapping
+	@ResponseBody
 	public ResponseEntity<Cliente> actualiza(@RequestBody Cliente obj) {
 		log.info(">>>> actualiza  " + obj.getIdCliente());
 		Optional<Cliente> optCliente = service.obtienePorId(obj.getIdCliente());
@@ -90,6 +93,7 @@ public class ClienteController {
 	}
 
 	@DeleteMapping("/{id}")
+	@ResponseBody
 	public ResponseEntity<Cliente> elimina(@PathVariable("id") int idCliente) {
 		log.info(">>>> elimina  " + idCliente);
 		Optional<Cliente> optCliente = service.obtienePorId(idCliente);
